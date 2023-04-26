@@ -48,6 +48,7 @@ export default {
 		// Check whether the value is already available in the cache
 		// if not, you will need to fetch it from origin, and store it in the cache
 		let response = await cache.match(cacheKey);
+		// let response = null;
 
 		if (!response) {
 		  console.log(
@@ -59,15 +60,20 @@ export default {
 		  // Must use Response constructor to inherit all of response's fields
 		  response = new Response(response.body, response);
 
-		  // Cache API respects Cache-Control headers. Setting s-max-age to X seconds
-		  // will limit the response to be in cache for 10 seconds max
+		  if (request.method === 'GET' && response.ok) {
+			// Cache API respects Cache-Control headers. Setting s-max-age to X seconds
+			// will limit the response to be in cache for 10 seconds max
 
-		  // Any changes made to the response here will be reflected in the cached value
-		  response.headers.append('Cache-Control', 's-maxage=30');
+			// Any changes made to the response here will be reflected in the cached value
+			response.headers.append('Cache-Control', 's-maxage=30');
 
-		  context.waitUntil(cache.put(cacheKey, response.clone()));
+			context.waitUntil(cache.put(cacheKey, response.clone()));
+			// await cache.put(cacheKey, response.clone()).catch((err) => {
+			// 	console.log(err);
+			// });
+		  }
 		} else {
-		  console.log(`Cache hit for: ${request.url}.`);
+		  console.log(`🎉  Cache hit for: ${request.url}.`);
 		}
 		return response;
 	  } catch (error) {
