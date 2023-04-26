@@ -1,0 +1,8 @@
+name = "proxify"
+main = "src/index.ts"
+compatibility_date = "2023-04-04"
+
+node_compat = true
+
+[dev]
+port = 9000
