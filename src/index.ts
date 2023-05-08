@@ -42,6 +42,12 @@ export default {
 
 	  // Construct the cache key from the cache URL
 	  const cacheKey = new Request(cacheUrl, request);
+	  console.log('cacheKey', {
+		cacheKey: JSON.stringify(cacheKey),
+		isString: typeof cacheKey === 'string',
+		isRequest: cacheKey instanceof Request,
+		isUrl: cacheKey instanceof URL,
+	  });
 	  const cache = caches.default;
 
 	  try {
